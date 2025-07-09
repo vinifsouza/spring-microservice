@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: email
   server:
@@ -12,7 +14,18 @@ spring:
       ddl-auto: update
     show-sql: true
   rabbitmq:
-    addresses: amqps://pflcoztb:Ljsi_J_R2YIuKAHxJbV20CsZJyVuT1yP@jaragua.lmq.cloudamqp.com/pflcoztb
+    addresses: ${RABBITMQ_ADDRESS}
+  mail:
+    host: ${MAIL_SMTP}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 broker:
   queue:

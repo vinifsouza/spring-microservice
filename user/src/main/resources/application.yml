@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: user
   server:
@@ -12,7 +14,7 @@ spring:
       ddl-auto: update
     show-sql: true
   rabbitmq:
-    addresses: amqps://pflcoztb:Ljsi_J_R2YIuKAHxJbV20CsZJyVuT1yP@jaragua.lmq.cloudamqp.com/pflcoztb
+    addresses: ${RABBITMQ_ADDRESS}
 
 broker:
   queue:
