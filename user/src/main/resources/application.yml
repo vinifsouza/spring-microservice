@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: user
+  server:
+    port: 8081
+  datasource:
+    url: jdbc:postgresql://localhost:5432/users_db
+    username: user
+    password: pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  rabbitmq:
+    addresses: amqps://pflcoztb:Ljsi_J_R2YIuKAHxJbV20CsZJyVuT1yP@jaragua.lmq.cloudamqp.com/pflcoztb
+
+broker:
+  queue:
+    email:
+      name: default.email
