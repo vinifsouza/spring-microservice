@@ -23,8 +23,11 @@ public class UserProducer {
 
         emailDto.setUserId(userModel.getUserId());
         emailDto.setEmailTo(userModel.getEmail());
-        emailDto.setSubject("UI UI UI...");
-        emailDto.setText("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH");
+        emailDto.setSubject("Cadastro realizado com sucesso!");
+        emailDto.setText(
+            "Olá, " + userModel.getName() + ". Essa é apenas uma notificação para informar que recebemos seu cadastro.\n"
+            + "Caso não tenha sido você, por favor entre em contato"
+        );
 
         rabbitTemplate.convertAndSend("", routingKey, emailDto);
     }
