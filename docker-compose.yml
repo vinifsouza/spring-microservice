@@ -1,31 +1,71 @@
 services:
-  users-db:
+  user-db:
     image: postgres:15
-    container_name: users-postgres
+    container_name: user-postgres
     environment:
-      POSTGRES_DB: users_db
+      POSTGRES_DB: user_db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
     ports:
       - "5432:5432"
     volumes:
-      - users_data:/var/lib/postgresql/data
+      - user_data:/var/lib/postgresql/data
     networks:
       - microservices-network
 
-  emails-db:
+  email-db:
     image: postgres:15
-    container_name: emails-postgres
+    container_name: email-postgres
     environment:
-      POSTGRES_DB: emails_db
+      POSTGRES_DB: email_db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
     ports:
       - "5433:5432"
+    expose:
+      - "5432"
     volumes:
-      - emails_data:/var/lib/postgresql/data
+      - email_data:/var/lib/postgresql/data
     networks:
       - microservices-network
+
+  user-service:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    container_name: user-service
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=user-db
+      - DB_PORT=5432
+      - SPRING_PORT=8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-db
+    networks:
+      - microservices-network
+    restart: unless-stopped
+
+  email-service:
+    build:
+      context: ./email
+      dockerfile: Dockerfile
+    container_name: email-service
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=email-db
+      - DB_PORT=5432
+      - SPRING_PORT=8081
+    ports:
+      - "8081:8081"
+    depends_on:
+      - email-db
+    networks:
+      - microservices-network
+    restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -36,14 +76,14 @@ services:
     ports:
       - "5555:80"
     depends_on:
-      - users-db
-      - emails-db
+      - user-db
+      - email-db
     networks:
       - microservices-network
 
 volumes:
-  users_data:
-  emails_data:
+  user_data:
+  email_data:
 
 networks:
   microservices-network:
